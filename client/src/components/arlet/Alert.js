@@ -5,18 +5,18 @@ import Loading from './Loading';
 import Toast from './Toast';
 
 function Arlet() {
-    const { auth, arlet } = useSelector(state => state)
+    const { auth, alert } = useSelector(state => state)
     const dispatch = useDispatch()
    
     return (
         <div>
-            {arlet.loading && <Loading />}
+            {alert.loading && <Loading />}
 
-            {arlet.error && <Toast msg={{title:'Error',body:arlet.error}}
+            {alert.error && <Toast msg={{title:'Error',body:alert.error}}
                 handleShow={() => dispatch({type: GLOBALTYPES.ALERT, payload: {}})} 
                 bgColor="bg-danger" />}
 
-            {arlet.success && <Toast msg={{title:'Success',body:arlet.success}}
+            {alert.success && <Toast msg={{title:'Success',body:alert.success}}
                 handleShow={() => dispatch({type: GLOBALTYPES.ALERT, payload: {}})} 
                 bgColor="bg-success" />}
         </div>

@@ -1,6 +1,8 @@
 import { GLOBALTYPES } from '../actions/index'
 
-const initialState = {}
+const initialState = {
+    
+}
 
 const alertReducer = (state = initialState, action) => {
     switch (action.type){

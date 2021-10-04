@@ -1,8 +1,15 @@
 import { combineReducers } from 'redux'
 import auth from './authReducer'
-import arlet from './arletReducer'
-
+import alert from './alertReducer'
+import theme from './themeReducer'
+import ava from './avatarReducer'
+import user from './userReducer'
+import status from './statusReducer'
 export default combineReducers({
     auth,
-    arlet
+    alert,
+    theme,
+    ava,
+    user,
+    status
 })

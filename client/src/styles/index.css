@@ -1,3 +1,17 @@
+:root {
+  --primary-color: #1877f2;
+  --bg-color: #f0f2f5;
+  --text-color: #1c1e21;
+  --white-color: #fff;
+  --border-color: #dddfe2;
+  --placeholder-color: #9e949c;
+  --green-color: #42b72a;
+  --gray-color: #75777b;
+  --header-height: 56px;
+  --hover-item: rgb(224, 223, 223);
+  --rgba-black: rgba(0, 0, 0, 0.1);
+  --active-min: #eaf3ff;
+}
 * {
   padding: 0;
   box-sizing: border-box;
@@ -25,7 +39,7 @@ code {
 .App {
   width: 100%;
   min-height: 100vh;
-  background: white;
+  background: #f7f7f7;
 }
 
 .main {
@@ -35,12 +49,27 @@ code {
   margin: auto;
 }
 
-img {
+/* img {
   object-fit: cover;
-}
+} */
 
 /* -------- AUTH ---------- */
 @import url("./auth.css");
 
 /* -------- LOADING ---------- */
 @import url("./loading.css");
+
+/* -------- Header ---------- */
+@import url("./header.css");
+
+/* -------- Profile ---------- */
+@import url("./profile.css");
+
+/* -------- Avatar ---------- */
+@import url("./avatar.css");
+
+/* -------- Home ---------- */
+@import url("./home.css");
+
+/* -------- Status Modal ---------- */
+@import url("./status_modal.css");

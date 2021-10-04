@@ -15,6 +15,7 @@ const Login = () => {
     const history = useHistory()
 
     useEffect(() => {
+        console.log(auth)
         if(auth.token) history.push("/")
     }, [auth.token, history])
 
@@ -56,7 +57,7 @@ const Login = () => {
                    
                 </div>
                 
-                <button type="submit" className="btn btn-dark w-100"
+                <button type="submit" className="btn btn-dark w-100 mt-3"
                 disabled={email && password ? false : true}>
                     Login
                 </button>
