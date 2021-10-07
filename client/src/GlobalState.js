@@ -15,7 +15,7 @@ export const DataProvider = ({children}) =>{
 
     const state = {
         postAPI:PostsAPI(auth.token),
-        userAPI:UserAPI()
+        userAPI:UserAPI(auth.token)
     } 
 
     console.log(state)

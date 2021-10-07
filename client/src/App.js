@@ -17,6 +17,8 @@ import { DataProvider } from './GlobalState';
 function App() {
   const { auth, status } = useSelector(state => state)
 
+  //console.log({status})
+
   const dispatch = useDispatch()
 
 

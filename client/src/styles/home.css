@@ -52,9 +52,11 @@
     margin-top: -10px;
     margin-bottom: 10px;
 }
-.posts .card_body-content .readMore{
+.posts .card_body-content .readMore,
+.readMore{
     color: crimson;
     cursor: pointer;
+    font-size: 1.25rem;
 }
 
 /* ---------- Post Card Footer ---------- */
@@ -146,12 +148,12 @@
     display: none;
     list-style: none;
     position: absolute;
-    width: 330px;
+    width: 204px;
     padding: 8px;
     background-color: var(--white-color);
     top: 120%;
     right: 0;
-    box-shadow: 0 1px 2px var(--rgba-black);
+    box-shadow: 0 1px 2px #bdbdbd;
     border-radius: 8px;
     animation: fadeIn ease-out 0.2s;
     z-index: 1;
@@ -181,15 +183,15 @@
 }
 
 .newsfeed__info-setting-list > div {
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    border-top: none;
+    border-bottom: none;
     margin: 8px 0;
     padding: 8px 0;
 }
 
 .newsfeed__info-setting-item {
     display: flex;
-    align-items: center;
+    align-items: nomarl;
     padding: 4px 12px;
     border-radius: 8px;
 }
@@ -199,7 +201,7 @@
 }
 
 .newsfeed__info-setting-item__img {
-    font-size: 2rem;
+    font-size: 1rem;
     width: 24px;
     height: 24px;
     margin-right: 8px;
@@ -207,7 +209,7 @@
 }
 
 .newsfeed__info-setting-item__text {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
@@ -234,8 +236,8 @@
 
 .newsfeed__content-text {
     color: var(--text-color);
-    font-size: 1.5rem;
-    padding: 0 16px 16px 16px;
+    font-size: 1.25rem;
+    padding: 0 16px 4px 16px;
 }
 
 .newsfeed__content-img {
@@ -545,6 +547,17 @@
     background: var(--bg-color);
     border-radius: 20px;
     padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-three-dot{
+    margin-top: 4px;
+    cursor: pointer;
+}
+.comment-three-dot .ant-btn{
+    border: none !important;
+    background: var(--bg-color) !important;
 }
 
 .comented-box__item-content {
@@ -570,9 +583,9 @@
 
 .commented-box__item-reaction {
     color: var(--gray-color);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    margin: 2px 16px;
+    margin: 0;
 }
 
 .commented-box__item-reaction span:hover {

@@ -5,7 +5,7 @@ export const getUser = (id) => async (dispatch) => {
     try {
         const res = await axios.get(`/api1/user/get_id/${id}`)
 
-        //console.log(res)
+        console.log(res)
     
          dispatch({ 
             type: GLOBALTYPES.GET_USER_ID, 

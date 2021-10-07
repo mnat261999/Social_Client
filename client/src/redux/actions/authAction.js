@@ -8,11 +8,13 @@ export const login = (data) => async (dispatch) => {
         dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true} })
         const res = await axios.post('api1/user/login',data)
 
- /*        console.log(res) */
+       console.log(res)
 
         const user = await axios.get('api1/user/infor',{
             headers: {Authorization: `Bearer ${res.data.token}`}
         })
+
+        console.log(user)
 
         dispatch({ 
             type: GLOBALTYPES.AUTH, 

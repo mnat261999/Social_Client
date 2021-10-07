@@ -1,0 +1,12 @@
+import React from 'react';
+import CommentCard from './CommentCard';
+
+function CommentDisplay({comment, post}) {
+    return (
+        <>
+           <CommentCard comment={comment} post={post}></CommentCard> 
+        </>
+    );
+}
+
+export default CommentDisplay;

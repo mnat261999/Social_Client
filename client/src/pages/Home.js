@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import Status from '../components/home/Status';
 import CardPost from '../components/home/CardPost';
+import SuggestFollow from '../components/home/SuggestFollow';
 
 function Home() {
     return (
@@ -13,7 +14,7 @@ function Home() {
                 </Col>
 
                 <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 8 }} lx={{ span: 8 }}>
-                    TEST
+                    <SuggestFollow/>
                 </Col>
 
             </Row>

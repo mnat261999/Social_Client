@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Modal } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { GLOBALTYPES } from '../../redux/actions';
@@ -10,14 +10,22 @@ function StatusModal() {
     const dispatch = useDispatch()
     const [content, setContent] = useState('')
     const [images, setImages] = useState([])
+    const [imagesAfter, setImagesAfter] = useState([])
     const [visible, setVisible] = useState(status)
     const [callback, setCallback] = state.postAPI.callback
+
+    useEffect(() => {
+        console.log(status.onEdit)
+        console.log({ images })
+        console.log({ imagesAfter })
+    }, [images])
 
     const handleChangeImages = async e => {
         e.preventDefault()
 
         const files = e.target.files[0]
         let newImages = []
+        let after = []
 
         console.log(files.type)
 
@@ -33,7 +41,17 @@ function StatusModal() {
             const res = await axios.post('/api2/upload/image', formData, {
                 headers: { 'content-type': 'multipart/form-data', Authorization: `Bearer ${auth.token}` }
             })
-            console.log(res)
+
+            if (status.onEdit) {
+                after.push({
+                    media: {
+                        public_id: res.data.public_id,
+                        url: res.data.url
+                    },
+                    typeMedia: res.data.typeMedia
+                })
+            }
+
             newImages.push({
                 media: {
                     public_id: res.data.public_id,
@@ -41,12 +59,23 @@ function StatusModal() {
                 },
                 typeMedia: res.data.typeMedia
             })
+
         }
 
         if (files.type == 'video/mp4') {
             const res = await axios.post('/api2/upload/video', formData, {
                 headers: { 'content-type': 'multipart/form-data', Authorization: `Bearer ${auth.token}` }
             })
+
+            if (status.onEdit) {
+                after.push({
+                    media: {
+                        public_id: res.data.public_id,
+                        url: res.data.url
+                    },
+                    typeMedia: res.data.typeMedia
+                })
+            } 
             newImages.push({
                 media: {
                     public_id: res.data.public_id,
@@ -54,32 +83,81 @@ function StatusModal() {
                 },
                 typeMedia: res.data.typeMedia
             })
-
         }
 
         setImages([...images, ...newImages])
 
-        console.log(images)
+        if (status.onEdit) {
+            console.log('test 234')
+            setImagesAfter([...imagesAfter, ...after])
+        }
+
+        //console.log(images)
     }
 
     const deleteImages = (index) => {
         const newArr = [...images]
         newArr.splice(index, 1)
         setImages(newArr)
+
+        if (status.onEdit) {
+            status.medias.map(async _ => (
+                await axios.delete(`/api2/post/delete_media/${_.idMedia}`, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            ))
+
+        }
     }
 
-    const handleSubmit = async (e) =>{
-        console.log('test')
-        const res = await axios.post('/api2/post/create',{content:content,media:images},{
-            headers: { Authorization: `Bearer ${auth.token}` }
-        })
-        
-        dispatch({ 
-            type: GLOBALTYPES.ALERT, 
-            payload: {
-                success: res.data.msg
-            } 
-        })
+    const handleSubmit = async (e) => {
+
+
+
+        if (status.onEdit) {
+
+            if(!content){
+                dispatch({
+                    type: GLOBALTYPES.ALERT,
+                    payload: {
+                        error: 'Content should not be empty'
+                    }
+                })
+
+                dispatch({ type: GLOBALTYPES.STATUS, payload: false })
+            }
+
+            await axios.put(`/api2/post/update_content/${status.idPost}`, { content: content }, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+            })
+
+            if(imagesAfter.length > 0){
+                await axios.put(`/api2/post/update_media/${status.idPost}`, { media: imagesAfter }, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            }
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: 'Update success'
+                }
+            })
+
+        } else {
+            //console.log('test')
+            const res = await axios.post('/api2/post/create', { content: content, media: images }, {
+                headers: { Authorization: `Bearer ${auth.token}` }
+            })
+
+            dispatch({
+                type: GLOBALTYPES.ALERT,
+                payload: {
+                    success: res.data.msg
+                }
+            })
+        }
+
 
         dispatch({ type: GLOBALTYPES.STATUS, payload: false })
 
@@ -87,6 +165,13 @@ function StatusModal() {
         setVisible(status)
         setImages([])
     }
+
+    useEffect(() => {
+        if (status.onEdit) {
+            setContent(status.content)
+            setImages(status.medias)
+        }
+    }, [status])
 
     return (
         <div className="status_modal">
@@ -105,10 +190,11 @@ function StatusModal() {
                     <div className="status_body">
                         <textarea name="content"
                             placeholder={`${auth.user.firstName}, what are you thinking?`}
-                            onChange={e => setContent(e.target.value)} />
+                            onChange={e => setContent(e.target.value)}
+                            value={content} />
 
- 
-                         <div className="show_images">
+
+                        <div className="show_images">
                             {
                                 images.map((img, index) => (
                                     img.typeMedia == 'image' &&
@@ -123,7 +209,7 @@ function StatusModal() {
                                     </div>
                                 ))
                             }
-                        </div> 
+                        </div>
 
 
                         <div className="input_images">
