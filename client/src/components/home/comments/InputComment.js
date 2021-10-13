@@ -58,8 +58,9 @@ function InputComment({ post,idComment, reply}) {
     }
     return (
         <>
-            <form >
+            <form style={{width:'100%'}} >
                 <input
+                    style={{width:'100%'}}
                     data-index={0}
                     type="text"
                     placeholder="Viết bình luận ..."

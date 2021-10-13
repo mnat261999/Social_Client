@@ -10,6 +10,10 @@ function PostsAPI(token) {
     const [total, setTotal] = useState(0)
     const [readMore, setReadMore] = useState(false)
     const [isLike, setLike] = useState(false)
+    const [userId, setUserId] = useState('')
+    const [postsByUser, setPostsByUser] = useState([])
+
+   
     
     useEffect(() =>{
         const getPosts = async () =>{
@@ -17,20 +21,31 @@ function PostsAPI(token) {
                 headers: {Authorization: `Bearer ${token}`}
             })
 
-            console.log(res)
+            //console.log(res)
 
             setPosts(res.data.posts)
             setResult(res.data.result)
             setTotal(res.data.total)
         }
 
-        
-
         setTimeout(() => {
             getPosts()
         }, 1000);
+
+        const getPostsByUser = async () =>{
+            //console.log(userId)
+            const res = await axios.get(`/api2/post/listByUser/${userId}`,{
+                headers: {Authorization: `Bearer ${token}`}
+            })
+
+            //console.log(res)
+
+            setPostsByUser(res.data.listPosts)
+        }
+
+        getPostsByUser()
         
-    },[callback,page])
+    },[callback,page,userId])
 
     return {
         posts: [posts, setPosts],
@@ -39,7 +54,9 @@ function PostsAPI(token) {
         result:[result, setResult],
         total:[total, setTotal],
         readMore: [readMore, setReadMore],
-        isLike: [isLike, setLike]
+        isLike: [isLike, setLike],
+        postsByUser: [postsByUser, setPostsByUser],
+        userId: [userId, setUserId]
     }
 }
 

@@ -5,18 +5,26 @@ import { GLOBALTYPES } from '../../../redux/actions';
 import { GlobalState } from '../../../GlobalState'
 import moment from 'moment';
 import { createFromIconfontCN } from '@ant-design/icons';
-import { Menu, Dropdown, Button } from 'antd';
+import { Menu, Dropdown, Button, Input } from 'antd';
 import axios from 'axios';
 import InputComment from './InputComment';
 
+const { TextArea } = Input;
+
 function CommentCard({ comment, post }) {
+
+    //console.log(comment)
 
     const state = useContext(GlobalState)
     const { auth, reply } = useSelector(state => state)
     const [content, setContent] = useState('')
+    const [text, setText] = useState('')
     const [readMore, setReadMore] = useState(false)
     const [users] = state.userAPI.users
     const [callback, setCallback] = state.postAPI.callback
+    const [update, setUpdate] = useState(false)
+    const [check, setCheck] = useState('')
+    const [id, setId] = useState('')
     const dispatch = useDispatch()
 
     const IconFont = createFromIconfontCN({
@@ -29,30 +37,85 @@ function CommentCard({ comment, post }) {
         setContent(comment.content)
     }, [comment.content])
 
-    const handleDeleteComment = async () => {
+    const handleDeleteComment = async (id) => {
+        console.log(id)
         try {
-            console.log(comment.idComment)
-            const res = await axios.delete(`/api2/comment/${comment.idComment}`, {
-                headers: { Authorization: `Bearer ${auth.token}` }
-            })
-
-            console.log(res)
+            if (id === comment.idComment) {
+                await axios.delete(`/api2/comment/${id}`, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            }
+            else {
+                await axios.delete(`/api2/comment/reply/${id}`, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            }
             setCallback(!callback)
         } catch (error) {
             console.log(error)
         }
     }
 
-    const menu = (
-        <Menu>
-            <Menu.Item key="1" icon={<IconFont type="icon-edit" />}>
-                Chỉnh sửa
-            </Menu.Item>
-            <Menu.Item key="2" onClick={handleDeleteComment} icon={<IconFont type="icon-delete1" />}>
-                Xóa
-            </Menu.Item>
-        </Menu>
-    );
+    const handleOpenEdit = async (id) => {
+        setUpdate(!update)
+        setId(id)
+        if (id === comment.idComment) {
+            console.log('text1')
+            setCheck('comment')
+            setText(comment.content)
+        } else {
+            console.log('text2')
+            setCheck('reply')
+            if (comment.replies.find(_ => _.idReply == id)) {
+                setText(comment.replies.find(_ => _.idReply == id).content)
+            }
+        }
+    }
+    const handleChange = async e => {
+        setText(e.target.value)
+    }
+    const handleCloseEdit = () => {
+        setUpdate(!update)
+        setText('')
+        setId('')
+        setCheck('')
+    }
+
+    const handleUpdate = async () => {
+        try {
+            if (id === comment.idComment) {
+                await axios.put(`/api2/comment/${id}`, { content: text }, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            }else{
+                await axios.put(`/api2/comment/reply/${id}`, { content: text }, {
+                    headers: { Authorization: `Bearer ${auth.token}` }
+                })
+            }
+            setCallback(!callback)
+            setUpdate(!update)
+            setText('')
+            setId('')
+            setCheck('')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+    const menu = (id) => {
+        return <>
+            <Menu>
+                <Menu.Item key='1' onClick={() => handleOpenEdit(id)} icon={<IconFont type="icon-edit" />}>
+                    Chỉnh sửa
+                </Menu.Item>
+                <Menu.Item key='2' onClick={() => handleDeleteComment(id)} icon={<IconFont type="icon-delete1" />}>
+                    Xóa
+                </Menu.Item>
+            </Menu>
+        </>
+    };
     return (
         <>
             <div style={{ display: "block" }} className="newsfeed__commented-box">
@@ -79,7 +142,7 @@ function CommentCard({ comment, post }) {
                             </div>
                             <div className="commented-box__item-info">
                                 <div className="wrap">
-                                    <div>
+                                    <div className="comented-box__parent">
                                         <div className="comented-box__item-content">
                                             <div className="comented-box__item-name">
                                                 <Link to={`/profile/${comment.idUserCreator}`}>
@@ -90,51 +153,81 @@ function CommentCard({ comment, post }) {
                                                     }
                                                 </Link>
                                             </div>
-                                            <div className="comented-box__item-text">
-                                                {
-                                                    content.length < 100 ? content :
-                                                        readMore ? content + ' ' : content.slice(0, 100) + '...'
-                                                }
-                                                {
-                                                    content.length > 100 &&
-                                                    <span style={{ fontSize: '1rem' }} className="readMore" onClick={() => setReadMore(!readMore)}>
-                                                        {readMore ? 'Hide content' : 'Read more'}
-                                                    </span>
-
-                                                }
-                                            </div>
-                                        </div>
-                                        <div className="commented-box__item-reaction" data-index={2}>
                                             {
-                                                reply.check && reply.comment === comment.idComment &&
-                                                <>
-                                                    <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
-                                                    <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({ type: GLOBALTYPES.REPLY, payload: false })}>
-                                                        Hủy
-                                                    </span>
-
-                                                </>
-                                                ||
-                                                <>
-                                                    <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
-                                                    <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({
-                                                        type: GLOBALTYPES.REPLY, payload: {
-                                                            check: true,
-                                                            comment: comment.idComment
+                                                (update && (check === 'comment')) ?
+                                                    <TextArea
+                                                        value={text}
+                                                        autoSize={{ minRows: 5, maxRows: 15 }}
+                                                        onChange={handleChange}
+                                                    />
+                                                    //<textarea className="comented-box__textarea" rows="7" defaultValue={text} onChange={handleChange}/>
+                                                    :
+                                                    <div className="comented-box__item-text">
+                                                        {
+                                                            content.length < 100 ? content :
+                                                                readMore ? content + ' ' : content.slice(0, 100) + '...'
                                                         }
-                                                    })}>
-                                                        Phản hồi
-                                                    </span>
+                                                        {
+                                                            content.length > 100 &&
+                                                            <span style={{ fontSize: '1rem' }} className="readMore" onClick={() => setReadMore(!readMore)}>
+                                                                {readMore ? 'Hide content' : 'Read more'}
+                                                            </span>
 
-                                                </>
+                                                        }
+                                                    </div>
                                             }
+
                                         </div>
+                                        {
+                                            (update && (check === 'comment')) ?
+                                                <div className="commented-box__item-reaction" data-index={2}>
+                                                    {
+
+                                                        <>
+                                                            <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
+                                                            <span className="commented-box__item-reaction--respond active" onClick={handleCloseEdit}>
+                                                                Hủy
+                                                            </span>
+                                                            <span className="ml-2 commented-box__item-reaction--respond active" onClick={handleUpdate}>
+                                                                Cập Nhật
+                                                            </span>
+
+                                                        </>
+                                                    }
+                                                </div> :
+                                                <div className="commented-box__item-reaction" data-index={2}>
+                                                    {
+                                                        reply.check && reply.comment === comment.idComment && !reply.rep &&
+                                                        <>
+                                                            <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
+                                                            <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({ type: GLOBALTYPES.REPLY, payload: false })}>
+                                                                Hủy
+                                                            </span>
+
+                                                        </>
+                                                        ||
+                                                        <>
+                                                            <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
+                                                            <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({
+                                                                type: GLOBALTYPES.REPLY, payload: {
+                                                                    check: true,
+                                                                    comment: comment.idComment,
+                                                                    rep: false
+                                                                }
+                                                            })}>
+                                                                Phản hồi
+                                                            </span>
+
+                                                        </>
+                                                    }
+                                                </div>
+                                        }
                                     </div>
 
                                     {
                                         auth.user.idUser === comment.idUserCreator
                                         && <div className="comment-three-dot">
-                                            <Dropdown.Button overlay={menu} placement="bottomCenter" icon={<IconFont type="icon-menudots" />} />
+                                            <Dropdown.Button overlay={() => menu(comment.idComment)} placement="bottomCenter" icon={<IconFont type="icon-menudots" />} />
                                         </div>
                                         || ""
                                     }
@@ -157,7 +250,7 @@ function CommentCard({ comment, post }) {
                         ></div>
                     </div>
                     {
-                        reply.check && reply.comment === comment.idComment &&
+                        reply.check && reply.comment === comment.idComment && !reply.rep &&
                         <div className="newsfeed__comment-user mt-2" style={{ paddingLeft: '36px' }}>
                             {
                                 auth.user.avas.length > 0
@@ -209,7 +302,7 @@ function CommentCard({ comment, post }) {
                                             </div>
                                             <div className="commented-box__item-info">
                                                 <div className="wrap">
-                                                    <div>
+                                                    <div style={{ width: '100%' }}>
                                                         <div className="comented-box__item-content">
                                                             <div className="comented-box__item-name">
                                                                 <Link to={`/profile/${r.idUserCreator}`}>
@@ -220,52 +313,80 @@ function CommentCard({ comment, post }) {
                                                                     }
                                                                 </Link>
                                                             </div>
-                                                            <div className="comented-box__item-text">
-                                                                {
-                                                                    r.content.length < 100 ? r.content :
-                                                                        readMore ? r.content + ' ' : r.content.slice(0, 100) + '...'
-                                                                }
-                                                                {
-                                                                    r.content.length > 100 &&
-                                                                    <span style={{ fontSize: '1rem' }} className="readMore" onClick={() => setReadMore(!readMore)}>
-                                                                        {readMore ? 'Hide content' : 'Read more'}
-                                                                    </span>
-
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                        <div className="commented-box__item-reaction" data-index={2}>
                                                             {
-                                                                reply.check && reply.comment === comment.idComment && reply.rep === r.idReply &&
-                                                                <>
-                                                                    <span className='font-weight-bold mr-3'>{moment(r.createdAt).fromNow()}</span>
-                                                                    <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({ type: GLOBALTYPES.REPLY, payload: false })}>
-                                                                        Hủy
-                                                                    </span>
-
-                                                                </>
-                                                                ||
-                                                                <>
-                                                                    <span className='font-weight-bold mr-3'>{moment(r.createdAt).fromNow()}</span>
-                                                                    <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({
-                                                                        type: GLOBALTYPES.REPLY, payload: {
-                                                                            check: true,
-                                                                            comment: comment.idComment,
-                                                                            rep: r.idReply
+                                                                (update && (check === 'reply')) ?
+                                                                    <TextArea
+                                                                        value={text}
+                                                                        autoSize={{ minRows: 5, maxRows: 15 }}
+                                                                        onChange={handleChange}
+                                                                    />
+                                                                    :
+                                                                    <div className="comented-box__item-text">
+                                                                        {
+                                                                            r.content.length < 100 ? r.content :
+                                                                                readMore ? r.content + ' ' : r.content.slice(0, 100) + '...'
                                                                         }
-                                                                    })}>
-                                                                        Phản hồi
-                                                                    </span>
+                                                                        {
+                                                                            r.content.length > 100 &&
+                                                                            <span style={{ fontSize: '1rem' }} className="readMore" onClick={() => setReadMore(!readMore)}>
+                                                                                {readMore ? 'Hide content' : 'Read more'}
+                                                                            </span>
 
-                                                                </>
+                                                                        }
+                                                                    </div>
                                                             }
                                                         </div>
+                                                        {
+                                                            (update && (check === 'reply')) ?
+                                                                <div className="commented-box__item-reaction" data-index={2}>
+                                                                    {
+
+                                                                        <>
+                                                                            <span className='font-weight-bold mr-3'>{moment(comment.createdAt).fromNow()}</span>
+                                                                            <span className="commented-box__item-reaction--respond active" onClick={handleCloseEdit}>
+                                                                                Hủy
+                                                                            </span>
+                                                                            <span className="ml-2 commented-box__item-reaction--respond active" onClick={handleUpdate}>
+                                                                                Cập Nhật
+                                                                            </span>
+
+                                                                        </>
+                                                                    }
+                                                                </div>
+                                                                :
+                                                                <div className="commented-box__item-reaction" data-index={2}>
+                                                                    {
+                                                                        reply.check && reply.comment === comment.idComment && reply.rep === r.idReply &&
+                                                                        <>
+                                                                            <span className='font-weight-bold mr-3'>{moment(r.createdAt).fromNow()}</span>
+                                                                            <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({ type: GLOBALTYPES.REPLY, payload: false })}>
+                                                                                Hủy
+                                                                            </span>
+
+                                                                        </>
+                                                                        ||
+                                                                        <>
+                                                                            <span className='font-weight-bold mr-3'>{moment(r.createdAt).fromNow()}</span>
+                                                                            <span className="commented-box__item-reaction--respond active" onClick={() => dispatch({
+                                                                                type: GLOBALTYPES.REPLY, payload: {
+                                                                                    check: true,
+                                                                                    comment: comment.idComment,
+                                                                                    rep: r.idReply
+                                                                                }
+                                                                            })}>
+                                                                                Phản hồi
+                                                                            </span>
+
+                                                                        </>
+                                                                    }
+                                                                </div>
+                                                        }
                                                     </div>
 
                                                     {
-                                                        auth.user.idUser === comment.idUserCreator
+                                                        auth.user.idUser === r.idUserCreator
                                                         && <div className="comment-three-dot">
-                                                            <Dropdown.Button overlay={menu} placement="bottomCenter" icon={<IconFont type="icon-menudots" />} />
+                                                            <Dropdown.Button key={r.idReply} overlay={() => menu(r.idReply)} placement="bottomCenter" icon={<IconFont type="icon-menudots" />} />
                                                         </div>
                                                         || ""
                                                     }

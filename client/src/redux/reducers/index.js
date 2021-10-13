@@ -7,6 +7,8 @@ import user from './userReducer'
 import status from './statusReducer'
 import reply from './replyReducer'
 import following  from './followingReducer'
+import profile from './profileReducer'
+import follower  from './followerReducer'
 export default combineReducers({
     auth,
     alert,
@@ -15,5 +17,7 @@ export default combineReducers({
     user,
     status,
     reply,
-    following
+    following,
+    profile,
+    follower
 })

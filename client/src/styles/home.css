@@ -540,7 +540,7 @@
 
 .commented-box__item-info {
     position: relative;
-    min-width: 200px;
+    width: 100%;
 }
 
 .commented-box__item-info .wrap {
@@ -569,6 +569,11 @@
     font-weight: 600;
     color: var(--text-color);
     margin-bottom: 2px;
+}
+.comented-box__item-content .comented-box__textarea{
+    width: 100% !important;
+    border: none !important;
+    outline: none !important;
 }
 
 .comented-box__item-text {
@@ -633,6 +638,10 @@
     color: var(--gray-color);
     font-size: 1.5rem;
     font-size: 300;
+}
+
+.comented-box__parent{
+    width: 100%;
 }
 
 /* ------------------------------ */

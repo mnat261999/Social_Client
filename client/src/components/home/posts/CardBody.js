@@ -1,19 +1,30 @@
-import React, { useContext,useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { GlobalState } from '../../../GlobalState'
-import { Carousel } from 'antd';
+/* import { Carousel } from 'antd'; */
 import { useSelector } from 'react-redux';
 import ButtonLike from './ButtonLike';
 import axios from 'axios';
+import { Carousel } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 function CardBody({ post }) {
-    const { auth} = useSelector(state => state)
+    const { auth } = useSelector(state => state)
     const state = useContext(GlobalState)
     const [readMore, setReadMore] = state.postAPI.readMore
     const [isLike, setLike] = state.postAPI.isLike
     const [callback, setCallback] = state.postAPI.callback
 
-    const handleLike = async () =>{
-        const res = await axios.post(`/api2/like/${post.idPost}`,' ',{
+
+    useEffect(() => {
+        console.log(post.likes)
+        if (post.likes.find(item => item.idUserCreator === auth.user.idUser)) {
+            setLike(true)
+        }
+        return () => setLike(false)
+    }, [post.likes, auth.user.idUser, callback])
+
+    const handleLike = async () => {
+        const res = await axios.post(`/api2/like/${post.idPost}`, ' ', {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
 
@@ -21,8 +32,8 @@ function CardBody({ post }) {
         setLike(true)
         setCallback(!callback)
     }
-    const handleUnLike = async () =>{
-        await axios.delete(`/api2/like/${post.idPost}`,{
+    const handleUnLike = async () => {
+        await axios.delete(`/api2/like/${post.idPost}`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
         setLike(false)
@@ -48,18 +59,27 @@ function CardBody({ post }) {
                 {
                     post.medias.length > 0
                     &&
-                    <Carousel >
+                    <Carousel>
                         {
                             post.medias.map(m => (
                                 m.typeMedia == "image"
                                 &&
-                                <div>
-                                    <img className="d-block w-100" controls src={m.media.url}></img>
-                                </div>
+                                <Carousel.Item>
+                                    <img
+                                        className="d-block w-100"
+                                        src={m.media.url}
+                                        alt="First slide"
+                                    />
+                                </Carousel.Item>
                                 ||
-                                <div>
-                                    <video className="d-block w-100" controls src={m.media.url}></video>
-                                </div>
+                                <Carousel.Item>
+                                    <video
+                                        controls
+                                        className="d-block w-100"
+                                        src={m.media.url}
+                                        alt="First slide"
+                                    />
+                                </Carousel.Item>
                             ))
                         }
                     </Carousel>
@@ -85,8 +105,9 @@ function CardBody({ post }) {
             </div>
             <ul data-index={0} className="newsfeed__action">
                 <ButtonLike isLike={isLike}
-                handleLike={handleLike}
-                handleUnLike={handleUnLike}
+                    handleLike={handleLike}
+                    handleUnLike={handleUnLike}
+                    post={post}
                 />
                 <li className="newsfeed__action-item comment-action">
                     <i className="far fa-comment-alt newsfeed__action-item-icon" />

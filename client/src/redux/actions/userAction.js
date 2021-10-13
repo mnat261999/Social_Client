@@ -2,10 +2,11 @@ import { GLOBALTYPES } from './index'
 import axios from 'axios'
 
 export const getUser = (id) => async (dispatch) => {
+    console.log("getUsser", id)
     try {
         const res = await axios.get(`/api1/user/get_id/${id}`)
 
-        console.log(res)
+        //console.log(res)
     
          dispatch({ 
             type: GLOBALTYPES.GET_USER_ID, 

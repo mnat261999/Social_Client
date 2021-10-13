@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Login from './pages/Login';
@@ -11,11 +11,13 @@ import Profile from './pages/Profile';
 import StatusModal from './components/home/StatusModal';
 /* import { getAvaByUser } from './redux/actions/avatarAction' */
 import { getUserInfor } from './redux/actions/authAction'
-import { DataProvider } from './GlobalState';
+import { DataProvider, GlobalState } from './GlobalState';
 
 
 function App() {
-  const { auth, status } = useSelector(state => state)
+  const state = useContext(GlobalState)
+  const { auth, status, profile } = useSelector(state => state)
+
 
   //console.log({status})
 

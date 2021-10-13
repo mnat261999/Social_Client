@@ -1,13 +1,20 @@
 import { GLOBALTYPES } from '../actions/index'
 
 const initialState = {
-    avas:[]
+    idUser: '',
+    avatarCurrent: '',
+    listAva : ''
 }
 
 const avatarReducer = (state = initialState, action) => {
     switch (action.type){
         case GLOBALTYPES.AVATAR_BY_USER:
-            return [...state.avas,action.payload]
+            return {
+                ...state,
+                idUser: action.payload.idUser,
+                avatarCurrent: action.payload.avatarCurrent,
+                listAva : action.payload.listAva
+            }
         default:
             return state;
     }

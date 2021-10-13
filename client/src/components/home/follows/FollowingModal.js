@@ -9,11 +9,11 @@ import { GlobalState } from '../../../GlobalState';
 
 
 
-function FollowModal({idUser}) {
+function FollowingModal({idUser}) {
     const state = useContext(GlobalState)
-    console.log(idUser)
+    //console.log(idUser)
     const { auth, following, user } = useSelector(state => state)
-    const [visible, setVisible] = useState(following)
+    const [visible] = useState(following)
     const [callbackFollow, setCallbackFollow] = useState(false)
     const [callback, setCallback] = state.userAPI.callback
 
@@ -101,4 +101,4 @@ function FollowModal({idUser}) {
     );
 }
 
-export default FollowModal;
+export default FollowingModal;

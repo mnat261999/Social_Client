@@ -49,6 +49,11 @@ code {
   margin: auto;
 }
 
+.carousel-control-prev,
+.carousel-control-next{
+  display: none !important;
+}
+
 /* img {
   object-fit: cover;
 } */

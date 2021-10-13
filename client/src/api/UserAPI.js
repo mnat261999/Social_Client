@@ -6,6 +6,8 @@ function UserAPI(token) {
     const [users, setUser] = useState([])
     const [suggest, setSuggest] = useState([])
     const [callback, setCallback] = useState(false)
+    const [callbackProfile, setCallbackProfile] = useState(false)
+
    
     useEffect(() =>{
         const getUsers = async () =>{
@@ -23,7 +25,7 @@ function UserAPI(token) {
                 headers: {Authorization: `Bearer ${token}`}
             })
 
-            console.log(res)
+            //console.log(res)
 
             setSuggest(res.data.userList)
 
@@ -35,7 +37,8 @@ function UserAPI(token) {
     return {
         users: [users, setUser] ,
         suggest : [suggest, setSuggest],
-        callback: [callback, setCallback]
+        callback: [callback, setCallback],
+        callbackProfile: [callbackProfile, setCallbackProfile] 
     }
 }
 

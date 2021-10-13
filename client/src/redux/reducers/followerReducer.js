@@ -1,9 +1,9 @@
 import { GLOBALTYPES } from '../actions/index'
 
 
-const followingReducer = (state = false, action) => {
+const followerReducer = (state = false, action) => {
     switch (action.type) {
-        case GLOBALTYPES.FOLLOWING:
+        case GLOBALTYPES.FOLLOWER:
             return action.payload;
         default:
             return state;
@@ -11,4 +11,4 @@ const followingReducer = (state = false, action) => {
 }
 
 
-export default followingReducer
+export default followerReducer
