@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import Menu from './Menu';
+import MenuHeader from './MenuHeader';
 
 function Header() {
     return (
@@ -17,7 +17,7 @@ function Header() {
 
    {/*              <Search /> */}
 
-                <Menu />
+                <MenuHeader />
             </nav>
         </div>
     );

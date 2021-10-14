@@ -11,7 +11,7 @@ const { Meta } = Card;
 
 function ProfilePost({ posts, idUser }) {
 
-    console.log(posts)
+    //console.log(posts)
 
     const state = useContext(GlobalState)
     const [readMore, setReadMore] = state.postAPI.readMore

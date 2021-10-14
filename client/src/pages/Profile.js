@@ -23,7 +23,7 @@ function Profile() {
     const [userId, setUserId] = state.postAPI.userId
     const [postsByUser] = state.postAPI.postsByUser
 
-    console.log(params.id)
+    //console.log(params.id)
 
 /*     useEffect(() =>{
         console.log('test')
@@ -31,7 +31,7 @@ function Profile() {
 
 
      useEffect(() => {
-        console.log('test')
+        //console.log('test')
         dispatch(getAvaByUser(params.id))
         setUserId(params.id)
         if (params.id == auth.user.idUser) {
@@ -42,7 +42,7 @@ function Profile() {
                 setLength(false)
             } else { setLength(true) }
         } else {
-            console.log('profile')
+            //console.log('profile')
             setCheck(false)
             dispatch(getUser(params.id))
             dispatch(getFollow(params.id))

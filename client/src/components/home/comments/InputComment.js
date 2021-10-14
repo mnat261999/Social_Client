@@ -13,6 +13,7 @@ function InputComment({ post,idComment, reply}) {
     const dispatch = useDispatch()
     const [comment, setComment] = useState('')
     const [callback, setCallback] = state.postAPI.callback
+    const [callbackNoti, setCallbackNoti] = state.notiAPI.callbackNoti
 
     const changeComment = async e => {
         //console.log(e.target.value)
@@ -44,6 +45,7 @@ function InputComment({ post,idComment, reply}) {
                         }) */
 
             setCallback(!callback)
+            setCallbackNoti(!callbackNoti)
             setComment('')
             dispatch({ type: GLOBALTYPES.REPLY, payload: false })
 

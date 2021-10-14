@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 function ButtonLike({ isLike, handleLike, handleUnLike, post }) {
     const { auth } = useSelector(state => state)
     const [liked, setLiked] = useState(false)
-    console.log(post)
+    //console.log(post)
     useEffect(() =>{
         if(post.likes.find(_ => _.idUserCreator === auth.user.idUser)){
             setLiked(true)

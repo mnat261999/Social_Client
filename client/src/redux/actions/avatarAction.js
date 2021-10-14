@@ -4,11 +4,11 @@ import axios from 'axios'
 export const getAvaByUser = (id) => async (dispatch) => {
     try {
 
-        console.log(id)
+        //console.log(id)
 
         const res = await axios.get(`/api1/avatar/${id}`)
 
-        console.log(res)
+        //console.log(res)
     
          dispatch({ 
             type: GLOBALTYPES.AVATAR_BY_USER, 

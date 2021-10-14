@@ -13,6 +13,7 @@ function CardBody({ post }) {
     const [readMore, setReadMore] = state.postAPI.readMore
     const [isLike, setLike] = state.postAPI.isLike
     const [callback, setCallback] = state.postAPI.callback
+    const [callbackNoti, setCallbackNoti] = state.notiAPI.callbackNoti
 
 
     useEffect(() => {
@@ -31,6 +32,7 @@ function CardBody({ post }) {
         //console.log(res)
         setLike(true)
         setCallback(!callback)
+        setCallbackNoti(!callbackNoti)
     }
     const handleUnLike = async () => {
         await axios.delete(`/api2/like/${post.idPost}`, {

@@ -11,6 +11,7 @@ function SuggestFollow() {
     const dispatch = useDispatch()
     const [suggest, setSuggest] = state.userAPI.suggest
     const [callback, setCallback] = state.userAPI.callback
+    const [callbackNoti, setCallbackNoti] = state.notiAPI.callbackNoti
 
 
     const handleFollow = async (id) =>{
@@ -19,6 +20,7 @@ function SuggestFollow() {
                 headers: {Authorization: `Bearer ${auth.token}`}  
             })
             setCallback(!callback)
+            setCallbackNoti(!callbackNoti)
         } catch (err) {
             dispatch({ 
                 type: GLOBALTYPES.ALERT, 

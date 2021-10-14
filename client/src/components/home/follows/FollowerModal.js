@@ -16,6 +16,7 @@ function FollowerModal({ idUser }) {
     const [visible, setVisible] = useState(follower)
     const [callbackFollow, setCallbackFollow] = useState(false)
     const [callback, setCallback] = state.userAPI.callback
+    const [callbackNoti, setCallbackNoti] = state.notiAPI.callbackNoti
 
     const dispatch = useDispatch()
 
@@ -31,6 +32,7 @@ function FollowerModal({ idUser }) {
         console.log(res)
         setCallbackFollow(!callbackFollow)
         setCallback(!callback)
+        setCallbackNoti(!callbackNoti)
     }
 
     const handleFollow = async (id) =>{

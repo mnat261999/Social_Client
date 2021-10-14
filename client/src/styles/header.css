@@ -18,6 +18,22 @@
 } 
 
 /* ----------- Header Menu ---------- */
+.noti,
+.noti-mark,
+.noti-view{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.noti-mark,
+.noti-view{
+    margin-top: 0px !important;
+    margin-bottom: 12px !important;
+    cursor: pointer;
+}
 .header .menu li{
     opacity: 0.5;
 }
