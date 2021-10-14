@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { GlobalState } from '../../../GlobalState'
 import { GLOBALTYPES } from '../../../redux/actions';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function CardHeader({ post }) {
     //console.log({post})
@@ -17,16 +18,16 @@ function CardHeader({ post }) {
         dispatch({ type: GLOBALTYPES.STATUS, payload: { ...post, onEdit: true } })
     }
 
-    const handleDeletePost = async () =>{
-        const res = await axios.delete(`/api2/post/${post.idPost}`,{
+    const handleDeletePost = async () => {
+        const res = await axios.delete(`/api2/post/${post.idPost}`, {
             headers: { Authorization: `Bearer ${auth.token}` }
         })
 
-        dispatch({ 
-            type: GLOBALTYPES.ALERT, 
+        dispatch({
+            type: GLOBALTYPES.ALERT,
             payload: {
                 success: res.data.msg
-            } 
+            }
         })
         setCallback(!callback)
     }
@@ -44,18 +45,25 @@ function CardHeader({ post }) {
                     && users.find(_ => _.idUser === post.idUser).avas.length > 0
                     && users.find(_ => _.idUser === post.idUser).avas.map(_ => (
                         _.checkNow == true &&
+                        <Link to={`/profile/${users.find(_ => _.idUser === post.idUser).idUser}`}>
+                            <img className="newsfeed__-profile-avt"
+                                src={_.avatar.url}
+                            />
+                        </Link>
+                    )) ||
+                    <Link to={`/profile/${users.find(_ => _.idUser === post.idUser).idUser}`}>
                         <img className="newsfeed__-profile-avt"
-                            src={_.avatar.url}
+                            src="https://res.cloudinary.com/lucy2619288/image/upload/v1615978378/avatar/avatar_cugq40.png"
                         />
-                    )) || <img className="newsfeed__-profile-avt"
-                        src="https://res.cloudinary.com/lucy2619288/image/upload/v1615978378/avatar/avatar_cugq40.png"
-                    />
+                    </Link>
 
                 }
                 <div className="newsfeed__info-profile-more">
-                    <span className="newsfeed__info-name checked">
-                        {users.find(_ => _.idUser === post.idUser) && users.find(_ => _.idUser === post.idUser).lastName + " " + users.find(_ => _.idUser === post.idUser).firstName || ""}
-                    </span>
+                    <Link to={`/profile/${users.find(_ => _.idUser === post.idUser).idUser}`}>
+                        <span className="newsfeed__info-name checked">
+                            {users.find(_ => _.idUser === post.idUser) && users.find(_ => _.idUser === post.idUser).lastName + " " + users.find(_ => _.idUser === post.idUser).firstName || ""}
+                        </span>
+                    </Link>
                     <div className="newsfeed__info-time">
                         {`${moment(post.updatedAt).fromNow()}`}
                     </div>

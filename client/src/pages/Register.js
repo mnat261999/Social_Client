@@ -40,7 +40,7 @@ function Register() {
     return (
         <div className="auth_page">
             <form onSubmit={handleSubmit}>
-                <h3 className="text-uppercase text-center mb-4">AT-SOCIAL</h3>
+                <h3 className="text-uppercase text-center mb-4">ĐĂNG KÝ</h3>
 
                 <div className="form-group">
                     <label htmlFor="firstName">First Name</label>
@@ -125,11 +125,11 @@ function Register() {
                 </div>
 
                 <button type="submit" className="btn btn-dark w-100 mt-3">
-                    Register
+                    Đăng ký
                 </button>
 
                 <p className="my-2">
-                    Already have an account? <Link to="/" style={{ color: "crimson" }}>Login Now</Link>
+                    Bạn đã có tài khoản? <Link to="/" style={{ color: "crimson" }}>Đăng nhập</Link>
                 </p>
             </form>
         </div>

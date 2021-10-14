@@ -32,7 +32,7 @@ const Login = () => {
     return (
         <div className="auth_page">
             <form onSubmit={handleSubmit}>
-                <h3 className="text-uppercase text-center mb-4">AT-SOCIAL</h3>
+                <h3 className="text-uppercase text-center mb-4">ĐĂNG NHẬP</h3>
 
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Email address</label>
@@ -59,11 +59,14 @@ const Login = () => {
                 
                 <button type="submit" className="btn btn-dark w-100 mt-3"
                 disabled={email && password ? false : true}>
-                    Login
+                    Đăng nhập
                 </button>
 
                 <p className="my-2">
-                    You don't have an account? <Link to="/register" style={{color: "crimson"}}>Register Now</Link>
+                    Bạn chưa có tài khoản? <Link to="/register" style={{color: "crimson"}}>Đăng ký</Link>
+                </p>
+                <p className="my-2">
+                   <Link to="/forgot_password" style={{color: "crimson"}}>Quên mật khẩu?</Link>
                 </p>
             </form>
         </div>

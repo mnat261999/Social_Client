@@ -31,7 +31,7 @@ function StatusModal() {
 
         if (!files) return alert("File not exist.")
 
-        if (files.size > 8 * 1024 * 1024) // 1mb
+        if (files.size > 10 * 1024 * 1024) // 1mb
             return alert("Size too large!")
 
         let formData = new FormData()

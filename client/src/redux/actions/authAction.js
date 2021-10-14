@@ -8,6 +8,15 @@ export const login = (data) => async (dispatch) => {
         dispatch({ type: GLOBALTYPES.ALERT, payload: {loading: true} })
         const res = await axios.post('api1/user/login',data)
 
+        //console.log(res)
+
+        if(res.status != 200) return dispatch({ 
+            type: GLOBALTYPES.ALERT, 
+            payload: {
+                error: res.data.msg
+            } 
+        })
+
        console.log(res)
 
         const user = await axios.get('api1/user/infor',{

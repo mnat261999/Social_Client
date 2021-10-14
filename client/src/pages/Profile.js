@@ -25,8 +25,12 @@ function Profile() {
 
     console.log(params.id)
 
+/*     useEffect(() =>{
+        console.log('test')
+    }) */
 
-    useEffect(() => {
+
+     useEffect(() => {
         console.log('test')
         dispatch(getAvaByUser(params.id))
         setUserId(params.id)
@@ -43,7 +47,7 @@ function Profile() {
             dispatch(getUser(params.id))
             dispatch(getFollow(params.id))
         }
-    }, [callbackProfile, params.id, auth.user.idUser, setCheck, dispatch, setLength])
+    }, [callbackProfile, params.id, auth.user.idUser, setCheck, dispatch, setLength]) 
 
 
 

@@ -10,6 +10,8 @@ import Header from './components/header/Header';
 import Profile from './pages/Profile';
 import StatusModal from './components/home/StatusModal';
 /* import { getAvaByUser } from './redux/actions/avatarAction' */
+import ForgotPass from './pages/ForgotPass';
+import ResetPass from './pages/ResetPass';
 import { getUserInfor } from './redux/actions/authAction'
 import { DataProvider, GlobalState } from './GlobalState';
 
@@ -43,6 +45,8 @@ function App() {
             <Route exact path="/register" component={Register} />
             <Route path="/user/activate/:activation_token" exact component={ActivationEmail} />
             <Route path="/profile/:id" exact component={Profile} />
+            <Route path="/forgot_password" exact component={ForgotPass} />
+            <Route path="/user/reset/:token" exact component={ResetPass} />
           </div>
         </div>
       </Router>
